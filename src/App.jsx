@@ -2,6 +2,7 @@ import { useState } from "react";
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
 import MatchCard from "./components/MatchCard.jsx";
+import MatchList from "./components/MatchList.jsx";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -29,18 +30,7 @@ function App() {
       <main>
         <h1>Upcoming Matches</h1>
 
-        <section>
-          {matches.map((m) => {
-            return (
-              <MatchCard
-                key={m.id}
-                title={m.title}
-                date={m.date}
-                location={m.location}
-              />
-            );
-          })}
-        </section>
+        <MatchList matches={matches} />
         <p>Counter: {count}</p>
         <button onClick={() => setCount(count + 1)}>+1</button>
       </main>
