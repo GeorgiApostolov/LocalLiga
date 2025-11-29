@@ -31,12 +31,14 @@ function App() {
 
         <section>
           {matches.map((m) => {
-            <MatchCard
-              key={m.id}
-              title={m.title}
-              date={m.date}
-              location={m.location}
-            />;
+            return (
+              <MatchCard
+                key={m.id}
+                title={m.title}
+                date={m.date}
+                location={m.location}
+              />
+            );
           })}
         </section>
         <p>Counter: {count}</p>
