@@ -1,12 +1,17 @@
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState } from "react";
+
+// COMP
 import Header from "./components/Header.jsx";
 import Footer from "./components/Footer.jsx";
 import MatchCard from "./components/MatchCard.jsx";
 import MatchList from "./components/MatchList.jsx";
 
-function App() {
-  const [count, setCount] = useState(0);
+// PAGES
+import Home from "./pages/Home.jsx";
+import Catalog from "./pages/Catalog.jsx";
 
+function App() {
   const matches = [
     {
       id: 1,
@@ -24,18 +29,16 @@ function App() {
   ];
 
   return (
-    <>
+    <BrowserRouter>
       <Header />
 
-      <main>
-        <h1>Upcoming Matches</h1>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/catalog" element={<Catalog matches={matches} />} />
+      </Routes>
 
-        <MatchList matches={matches} />
-        <p>Counter: {count}</p>
-        <button onClick={() => setCount(count + 1)}>+1</button>
-      </main>
       <Footer />
-    </>
+    </BrowserRouter>
   );
 }
 
