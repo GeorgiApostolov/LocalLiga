@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 function MatchDetails({ matches }) {
   const { matchId } = useParams();
@@ -25,6 +25,10 @@ function MatchDetails({ matches }) {
       <p>
         <strong>ID:</strong> {match.id}
       </p>
+
+      <Link to={`/matches/${matchId}`}>Back to details</Link>
+      <br />
+      <Link to={`/matches/${matchId}/edit`}>Edit match</Link>
     </main>
   );
 }
