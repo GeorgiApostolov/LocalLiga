@@ -14,6 +14,9 @@ function Header() {
         <Link to="/catalog" style={{ color: "#fff", textDecoration: "none" }}>
           Matches
         </Link>
+        <Link to="/create" style={{ color: "#fff", textDecoration: "none" }}>
+          Create Match
+        </Link>
       </nav>
     </header>
   );
