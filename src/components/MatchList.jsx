@@ -7,6 +7,7 @@ export default function MatchList({ matches }) {
         return (
           <MatchCard
             key={m.id}
+            id={m.id}
             title={m.title}
             date={m.date}
             location={m.location}

@@ -9,6 +9,7 @@ import MatchList from "./components/MatchList.jsx";
 // PAGES
 import Home from "./pages/Home.jsx";
 import Catalog from "./pages/Catalog.jsx";
+import MatchDetails from "./pages/MatchDetails.jsx";
 
 function App() {
   const matches = [
@@ -34,6 +35,10 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/catalog" element={<Catalog matches={matches} />} />
+        <Route
+          path="/matches/:matchId"
+          element={<MatchDetails matches={matches} />}
+        />
       </Routes>
 
       <Footer />
