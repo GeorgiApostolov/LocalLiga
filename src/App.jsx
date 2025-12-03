@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useState } from "react";
 
 // COMP
 import Header from "./components/Header.jsx";
@@ -10,9 +11,10 @@ import MatchList from "./components/MatchList.jsx";
 import Home from "./pages/Home.jsx";
 import Catalog from "./pages/Catalog.jsx";
 import MatchDetails from "./pages/MatchDetails.jsx";
+import CreateMatch from "./pages/CreateMatch.jsx";
 
 function App() {
-  const matches = [
+  const [matches, setMatches] = useState([
     {
       id: 1,
       title: "Sunday League",
@@ -26,7 +28,16 @@ function App() {
       location: "Nadezhda",
     },
     { id: 3, title: "Weekend Cup", date: "2025-11-15", location: "Druzhba" },
-  ];
+  ]);
+
+  function handleCreateMatch(matchData) {
+    const newMatch = {
+      id: Date.now(), // проста уникална стойност
+      ...matchData,
+    };
+
+    setMatches((prevMatches) => [...prevMatches, newMatch]);
+  }
 
   return (
     <BrowserRouter>
@@ -38,6 +49,10 @@ function App() {
         <Route
           path="/matches/:matchId"
           element={<MatchDetails matches={matches} />}
+        />
+        <Route
+          path="/create"
+          element={<CreateMatch onCreateMatch={handleCreateMatch} />}
         />
       </Routes>
 
