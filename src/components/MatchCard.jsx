@@ -3,15 +3,15 @@ import { Link } from "react-router-dom";
 function MatchCard({ id, title, date, location }) {
   return (
     <article className="card">
-      <h3>{title}</h3>
-      <p>Date: {date}</p>
-      <p>Location: {location}</p>
+      <div>
+        <h3 className="card-title">{title}</h3>
+        <span className="card-date">{date}</span>
+      </div>
 
-      <Link
-        to={`/matches/${id}`}
-        style={{ marginTop: "0.5rem", display: "inline-block" }}
-      >
-        View Details
+      <p className="card-location">Location: {location}</p>
+
+      <Link to={`/matches/${id}`} className="btn-link">
+        View details
       </Link>
     </article>
   );
