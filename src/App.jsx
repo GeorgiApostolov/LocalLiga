@@ -13,6 +13,8 @@ import Catalog from "./pages/Catalog.jsx";
 import MatchDetails from "./pages/MatchDetails.jsx";
 import CreateMatch from "./pages/CreateMatch.jsx";
 import EditMatch from "./pages/EditMatch.jsx";
+import Login from "./pages/Login.jsx";
+import Register from "./pages/Register.jsx";
 
 function App() {
   const [matches, setMatches] = useState([
@@ -73,6 +75,8 @@ function App() {
           path="/create"
           element={<CreateMatch onCreateMatch={handleCreateMatch} />}
         />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
       </Routes>
 
       <Footer />

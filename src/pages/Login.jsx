@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext.jsx";
 
-function login() {
+function Login() {
   const [values, setValues] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -64,4 +64,4 @@ function login() {
   );
 }
 
-export default login;
+export default Login;
