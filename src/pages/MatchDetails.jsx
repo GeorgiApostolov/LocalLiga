@@ -26,8 +26,6 @@ function MatchDetails({ matches }) {
         <strong>ID:</strong> {match.id}
       </p>
 
-      <Link to={`/matches/${matchId}`}>Back to details</Link>
-      <br />
       <Link to={`/matches/${matchId}/edit`}>Edit match</Link>
     </main>
   );
