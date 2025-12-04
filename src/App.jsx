@@ -45,6 +45,11 @@ function App() {
       prevMatches.map((m) => (m.id === matchId ? { ...m, ...updatedData } : m))
     );
   }
+
+  function handleDeleteMatch(matchId) {
+    setMatches((prevMatches) => prevMatches.filter((m) => m.id !== matchId));
+  }
+
   return (
     <BrowserRouter>
       <Header />
@@ -54,7 +59,9 @@ function App() {
         <Route path="/catalog" element={<Catalog matches={matches} />} />
         <Route
           path="/matches/:matchId"
-          element={<MatchDetails matches={matches} />}
+          element={
+            <MatchDetails matches={matches} onDeleteMatch={handleDeleteMatch} />
+          }
         />
         <Route
           path="/matches/:matchId/edit"
