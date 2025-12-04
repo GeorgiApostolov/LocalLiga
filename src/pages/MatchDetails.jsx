@@ -1,7 +1,8 @@
-import { Link, useParams } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 
-function MatchDetails({ matches }) {
+function MatchDetails({ matches, onDeleteMatch }) {
   const { matchId } = useParams();
+  const navigate = useNavigate;
 
   const match = matches.find((m) => m.id === Number(matchId));
 
@@ -11,6 +12,19 @@ function MatchDetails({ matches }) {
         <h2>Match not found.</h2>
       </main>
     );
+  }
+
+  function handleDelete() {
+    const confirmed = window.confirm(
+      "Are you sure you want to delete this match?"
+    );
+
+    if (!confirmed) {
+      return;
+    }
+
+    onDeleteMatch(match.id);
+    navigate("/catalog");
   }
 
   return (
@@ -27,6 +41,10 @@ function MatchDetails({ matches }) {
       </p>
 
       <Link to={`/matches/${matchId}/edit`}>Edit match</Link>
+
+      <div style={{ marginTop: "1rem" }}>
+        <button onClick={handleDelete}>Delete match</button>
+      </div>
     </main>
   );
 }
