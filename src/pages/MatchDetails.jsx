@@ -43,7 +43,9 @@ function MatchDetails({ matches, onDeleteMatch }) {
       <Link to={`/matches/${matchId}/edit`}>Edit match</Link>
 
       <div style={{ marginTop: "1rem" }}>
-        <button onClick={handleDelete}>Delete match</button>
+        <button className="danger" onClick={handleDelete}>
+          Delete match
+        </button>
       </div>
     </main>
   );

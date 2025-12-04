@@ -79,3 +79,13 @@ section {
 .actions {
   margin-top: 0.5rem;
 }
+
+button.danger {
+  border-color: #dc2626;
+  color: #dc2626;
+}
+
+button.danger:hover {
+  background: #dc2626;
+  color: #fff;
+}
