@@ -1,22 +1,30 @@
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 
 function Header() {
   return (
-    <header style={{ background: "#111", color: "#fff", padding: "1rem" }}>
-      <nav style={{ display: "flex", gap: "1rem" }}>
-        <Link
-          to="/"
-          style={{ color: "#fff", textDecoration: "none", fontWeight: 600 }}
-        >
+    <header className="site-header">
+      <nav className="site-nav">
+        <NavLink to="/" className="site-logo">
           LocalLiga ⚽
-        </Link>
+        </NavLink>
 
-        <Link to="/catalog" style={{ color: "#fff", textDecoration: "none" }}>
+        <NavLink
+          to="/catalog"
+          className={({ isActive }) =>
+            isActive ? "nav-link nav-link-active" : "nav-link"
+          }
+        >
           Matches
-        </Link>
-        <Link to="/create" style={{ color: "#fff", textDecoration: "none" }}>
+        </NavLink>
+
+        <NavLink
+          to="/create"
+          className={({ isActive }) =>
+            isActive ? "nav-link nav-link-active" : "nav-link"
+          }
+        >
           Create Match
-        </Link>
+        </NavLink>
       </nav>
     </header>
   );
