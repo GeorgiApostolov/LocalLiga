@@ -2,7 +2,7 @@ import { Link, useParams, useNavigate } from "react-router-dom";
 
 function MatchDetails({ matches, onDeleteMatch }) {
   const { matchId } = useParams();
-  const navigate = useNavigate;
+  const navigate = useNavigate();
 
   const match = matches.find((m) => m.id === Number(matchId));
 
