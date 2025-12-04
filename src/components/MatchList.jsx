@@ -2,7 +2,7 @@ import MatchCard from "./MatchCard.jsx";
 
 export default function MatchList({ matches }) {
   return (
-    <section>
+    <section className="match-list">
       {matches.map((m) => {
         return (
           <MatchCard
