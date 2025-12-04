@@ -10,9 +10,14 @@ function Register() {
   });
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const { login } = useAuth();
+  const { login } = useAuth(); // засега логваме веднага след "регистрация"
 
   function handleChange(e) {
+    const { name, value } = e.target;
+    setValues((prev) => ({ ...prev, [name]: value }));
+  }
+
+  function handleSubmit(e) {
     e.preventDefault();
 
     if (
@@ -23,15 +28,18 @@ function Register() {
       setError("All fields are required");
       return;
     }
+
     if (values.password !== values.repeatPassword) {
       setError("Passwords do not match");
       return;
     }
 
+    // по-късно ще викаме SoftUni server /users/register
     login({
       email: values.email,
       accessToken: "dummy-token",
     });
+
     navigate("/catalog");
   }
 
@@ -81,4 +89,5 @@ function Register() {
     </main>
   );
 }
+
 export default Register;
