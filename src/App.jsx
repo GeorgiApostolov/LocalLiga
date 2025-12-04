@@ -12,6 +12,7 @@ import Home from "./pages/Home.jsx";
 import Catalog from "./pages/Catalog.jsx";
 import MatchDetails from "./pages/MatchDetails.jsx";
 import CreateMatch from "./pages/CreateMatch.jsx";
+import EditMatch from "./pages/EditMatch.jsx";
 
 function App() {
   const [matches, setMatches] = useState([
@@ -39,6 +40,11 @@ function App() {
     setMatches((prevMatches) => [...prevMatches, newMatch]);
   }
 
+  function handleEditMatch(matchId, updatedData) {
+    setMatches((prevMatches) =>
+      prevMatches.map((m) => (m.id === matchId ? { ...m, ...updatedData } : m))
+    );
+  }
   return (
     <BrowserRouter>
       <Header />
@@ -49,6 +55,12 @@ function App() {
         <Route
           path="/matches/:matchId"
           element={<MatchDetails matches={matches} />}
+        />
+        <Route
+          path="/matches/:matchId/edit"
+          element={
+            <EditMatch matches={matches} onEditMatch={handleEditMatch} />
+          }
         />
         <Route
           path="/create"
