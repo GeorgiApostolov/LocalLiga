@@ -1,7 +1,8 @@
 import { Link, useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext.jsx";
+import * as matchesApi from "../api/matches";
 
-function MatchDetails({ matches, onDeleteMatch }) {
+function MatchDetails({ matches }) {
   const { matchId } = useParams();
   const navigate = useNavigate();
 
@@ -18,7 +19,7 @@ function MatchDetails({ matches, onDeleteMatch }) {
     );
   }
 
-  function handleDelete() {
+  async function handleDelete() {
     const confirmed = window.confirm(
       "Are you sure you want to delete this match?"
     );
@@ -27,7 +28,7 @@ function MatchDetails({ matches, onDeleteMatch }) {
       return;
     }
 
-    onDeleteMatch(match.id);
+    await matchesApi.deleteMatch(match._id, user.accessToken);
     navigate("/catalog");
   }
 
@@ -39,9 +40,6 @@ function MatchDetails({ matches, onDeleteMatch }) {
       </p>
       <p>
         <strong>Location:</strong> {match.location}
-      </p>
-      <p>
-        <strong>ID:</strong> {match.id}
       </p>
 
       {isOwner && (

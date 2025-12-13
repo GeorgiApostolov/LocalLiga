@@ -1,47 +1,36 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useAuth } from "../contexts/AuthContext.jsx";
 
-function EditMatch({ matches, onEditMatch }) {
+import { useAuth } from "../contexts/AuthContext.jsx";
+import * as matchesApi from "../api/matches";
+
+function EditMatch({ matches, onEdited }) {
   const navigate = useNavigate();
   const { matchId } = useParams();
+
+  const { user, isAuthenticated } = useAuth();
 
   const existingMatch = matches.find((m) => m._id === matchId);
 
   const [values, setValues] = useState(() => {
     if (!existingMatch) {
-      return {
-        title: "",
-        date: "",
-        location: "",
-      };
+      return { title: "", date: "", location: "" };
     }
 
     return {
-      title: existingMatch.title,
-      date: existingMatch.date,
-      location: existingMatch.location,
+      title: existingMatch.title || "",
+      date: existingMatch.date || "",
+      location: existingMatch.location || "",
     };
   });
 
   const [errors, setErrors] = useState({});
 
-  const { user, isAuthenticated } = useAuth();
-  const isOwner = isAuthenticated && existingMatch._ownerId === user._id;
-
-  if (!isOwner) {
-    return (
-      <main>
-        <h2>Not authorized.</h2>
-      </main>
-    );
-  }
-
   function handleChange(e) {
     const { name, value } = e.target;
 
-    setValues((prevValues) => ({
-      ...prevValues,
+    setValues((prev) => ({
+      ...prev,
       [name]: value,
     }));
   }
@@ -49,33 +38,36 @@ function EditMatch({ matches, onEditMatch }) {
   function validate(formValues) {
     const newErrors = {};
 
-    if (!formValues.title.trim()) {
-      newErrors.title = "Title is required";
-    }
-
-    if (!formValues.date.trim()) {
-      newErrors.date = "Date is required";
-    }
-
-    if (!formValues.location.trim()) {
+    if (!formValues.title.trim()) newErrors.title = "Title is required";
+    if (!formValues.date.trim()) newErrors.date = "Date is required";
+    if (!formValues.location.trim())
       newErrors.location = "Location is required";
-    }
 
     return newErrors;
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
     const validationErrors = validate(values);
-
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
       return;
     }
 
-    onEditMatch(Number(matchId), values);
-    navigate(`/matches/${matchId}`);
+    try {
+      setErrors({});
+
+      await matchesApi.updateMatch(matchId, values, user.accessToken);
+
+      if (onEdited) {
+        await onEdited();
+      }
+
+      navigate(`/matches/${matchId}`);
+    } catch (err) {
+      setErrors({ form: err.message });
+    }
   }
 
   if (!existingMatch) {
@@ -86,9 +78,19 @@ function EditMatch({ matches, onEditMatch }) {
     );
   }
 
+  const isOwner = isAuthenticated && existingMatch._ownerId === user._id;
+
+  if (!isOwner) {
+    return (
+      <main>
+        <h2>Not authorized.</h2>
+      </main>
+    );
+  }
+
   return (
     <main>
-      <h1>Edit Match</h1>
+      <h1 className="page-title">Edit Match</h1>
 
       <form onSubmit={handleSubmit} className="form">
         <div className="field">
@@ -124,6 +126,8 @@ function EditMatch({ matches, onEditMatch }) {
           />
           {errors.location && <p className="error">{errors.location}</p>}
         </div>
+
+        {errors.form && <p className="error">{errors.form}</p>}
 
         <div className="actions">
           <button type="submit">Save changes</button>
