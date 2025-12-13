@@ -1,33 +1,61 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
+import * as authApi from "../api/auth";
 
 const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState(() => {
+    const saved = localStorage.getItem("auth");
+    return saved ? JSON.parse(saved) : null;
+  });
 
-  function login(userData) {
-    // TODO: тук ще викнем SoftUni server
-    setUser(userData);
+  useEffect(() => {
+    if (user) localStorage.setItem("auth", JSON.stringify(user));
+    else localStorage.removeItem("auth");
+  }, [user]);
+
+  async function login(email, password) {
+    const result = await authApi.login(email, password);
+    setUser({
+      email: result.email,
+      accessToken: result.accessToken,
+      _id: result._id,
+    });
   }
 
-  function logout() {
+  async function register(email, password) {
+    const result = await authApi.register(email, password);
+    setUser({
+      email: result.email,
+      accessToken: result.accessToken,
+      _id: result._id,
+    });
+  }
+
+  async function logout() {
+    if (user?.accessToken) {
+      await authApi.logout(user.accessToken);
+    }
     setUser(null);
   }
 
-  const value = {
-    user,
-    isAuthenticated: !!user,
-    login,
-    logout,
-  };
-
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider
+      value={{
+        user,
+        isAuthenticated: !!user,
+        login,
+        register,
+        logout,
+      }}
+    >
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 export function useAuth() {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error("useAuth must be used within AuthProvider");
-  }
-  return context;
+  const ctx = useContext(AuthContext);
+  if (!ctx) throw new Error("useAuth must be used within AuthProvider");
+  return ctx;
 }
