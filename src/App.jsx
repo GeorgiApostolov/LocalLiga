@@ -1,26 +1,21 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
+
+import Header from "./components/Header";
+import Footer from "./components/Footer";
+
+import Home from "./pages/Home";
+import Catalog from "./pages/Catalog";
+import MatchDetails from "./pages/MatchDetails";
+import CreateMatch from "./pages/CreateMatch";
+import EditMatch from "./pages/EditMatch";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+
+import PrivateRoute from "./guards/PrivateRoute";
+import GuestRoute from "./guards/GuestRoute";
+
 import * as matchesApi from "./api/matches";
-import { useAuth } from "./contexts/AuthContext.jsx";
-
-// COMP
-import Header from "./components/Header.jsx";
-import Footer from "./components/Footer.jsx";
-import MatchCard from "./components/MatchCard.jsx";
-import MatchList from "./components/MatchList.jsx";
-
-// PAGES
-import Home from "./pages/Home.jsx";
-import Catalog from "./pages/Catalog.jsx";
-import MatchDetails from "./pages/MatchDetails.jsx";
-import CreateMatch from "./pages/CreateMatch.jsx";
-import EditMatch from "./pages/EditMatch.jsx";
-import Login from "./pages/Login.jsx";
-import Register from "./pages/Register.jsx";
-
-// GUARDS
-import PrivateRoute from "./guards/PrivateRoute.jsx";
-import GuestRoute from "./guards/GuestRoute.jsx";
 
 function App() {
   const [matches, setMatches] = useState([]);
@@ -41,23 +36,16 @@ function App() {
     })();
   }, []);
 
-  function handleCreateMatch(matchData) {
-    const newMatch = {
-      id: Date.now(), // проста уникална стойност
-      ...matchData,
-    };
-
-    setMatches((prevMatches) => [...prevMatches, newMatch]);
-  }
-
-  function handleEditMatch(matchId, updatedData) {
-    setMatches((prevMatches) =>
-      prevMatches.map((m) => (m.id === matchId ? { ...m, ...updatedData } : m))
+  if (loading) {
+    return (
+      <>
+        <Header />
+        <main>
+          <h2>Loading...</h2>
+        </main>
+        <Footer />
+      </>
     );
-  }
-
-  function handleDeleteMatch(matchId) {
-    setMatches((prevMatches) => prevMatches.filter((m) => m.id !== matchId));
   }
 
   return (
@@ -67,28 +55,23 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/catalog" element={<Catalog matches={matches} />} />
+
         <Route
           path="/matches/:matchId"
-          element={
-            <MatchDetails matches={matches} onDeleteMatch={handleDeleteMatch} />
-          }
+          element={<MatchDetails matches={matches} onDeleted={reloadMatches} />}
         />
 
-        {/* PRIVATE */}
         <Route element={<PrivateRoute />}>
           <Route
             path="/create"
-            element={<CreateMatch onCreateMatch={handleCreateMatch} />}
+            element={<CreateMatch onCreated={reloadMatches} />}
           />
           <Route
             path="/matches/:matchId/edit"
-            element={
-              <EditMatch matches={matches} onEditMatch={handleEditMatch} />
-            }
+            element={<EditMatch matches={matches} onEdited={reloadMatches} />}
           />
         </Route>
 
-        {/* GUEST */}
         <Route element={<GuestRoute />}>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />

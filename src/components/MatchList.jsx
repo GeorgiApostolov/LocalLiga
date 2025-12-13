@@ -1,19 +1,19 @@
-import MatchCard from "./MatchCard.jsx";
+import MatchCard from "./MatchCard";
 
-export default function MatchList({ matches }) {
+function MatchList({ matches }) {
   return (
     <section className="match-list">
-      {matches.map((m) => {
-        return (
-          <MatchCard
-            key={m.id}
-            id={m.id}
-            title={m.title}
-            date={m.date}
-            location={m.location}
-          />
-        );
-      })}
+      {matches.map((m) => (
+        <MatchCard
+          key={m._id}
+          id={m._id}
+          title={m.title}
+          date={m.date}
+          location={m.location}
+        />
+      ))}
     </section>
   );
 }
+
+export default MatchList;
