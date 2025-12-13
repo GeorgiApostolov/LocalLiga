@@ -1,7 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext.jsx";
+import * as matchesApi from "../api/matches";
 
-function CreateMatch({ onCreateMatch }) {
+function CreateMatch({ onCreated }) {
+  const { user } = useAuth();
+
   const navigate = useNavigate();
 
   const [values, setValues] = useState({
@@ -39,17 +43,23 @@ function CreateMatch({ onCreateMatch }) {
     return newErrors;
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
-    const validationErrors = validate(values);
+    try {
+      setErrors({});
+      const validationErrors = validate(values);
+      if (Object.keys(validationErrors).length > 0) {
+        setErrors(validationErrors);
+        return;
+      }
 
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
+      await matchesApi.createMatch(values, user.accessToken);
+      await onCreated();
+      navigate("/catalog");
+    } catch (err) {
+      setErrors({ form: err.message });
     }
-    onCreateMatch(values);
-    navigate("/catalog");
   }
 
   return (

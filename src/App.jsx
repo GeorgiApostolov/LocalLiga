@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useState, useEffect } from "react";
 import * as matchesApi from "./api/matches";
+import { useAuth } from "./contexts/AuthContext.jsx";
 
 // COMP
 import Header from "./components/Header.jsx";
@@ -20,9 +21,6 @@ import Register from "./pages/Register.jsx";
 // GUARDS
 import PrivateRoute from "./guards/PrivateRoute.jsx";
 import GuestRoute from "./guards/GuestRoute.jsx";
-
-function App() {
-
 
 function App() {
   const [matches, setMatches] = useState([]);
