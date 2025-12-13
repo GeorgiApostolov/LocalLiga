@@ -16,6 +16,10 @@ import EditMatch from "./pages/EditMatch.jsx";
 import Login from "./pages/Login.jsx";
 import Register from "./pages/Register.jsx";
 
+// GUARDS
+import PrivateRoute from "./guards/PrivateRoute.jsx";
+import GuestRoute from "./guards/GuestRoute.jsx";
+
 function App() {
   const [matches, setMatches] = useState([
     {
@@ -65,18 +69,26 @@ function App() {
             <MatchDetails matches={matches} onDeleteMatch={handleDeleteMatch} />
           }
         />
-        <Route
-          path="/matches/:matchId/edit"
-          element={
-            <EditMatch matches={matches} onEditMatch={handleEditMatch} />
-          }
-        />
-        <Route
-          path="/create"
-          element={<CreateMatch onCreateMatch={handleCreateMatch} />}
-        />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
+
+        {/* PRIVATE */}
+        <Route element={<PrivateRoute />}>
+          <Route
+            path="/create"
+            element={<CreateMatch onCreateMatch={handleCreateMatch} />}
+          />
+          <Route
+            path="/matches/:matchId/edit"
+            element={
+              <EditMatch matches={matches} onEditMatch={handleEditMatch} />
+            }
+          />
+        </Route>
+
+        {/* GUEST */}
+        <Route element={<GuestRoute />}>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Route>
       </Routes>
 
       <Footer />
