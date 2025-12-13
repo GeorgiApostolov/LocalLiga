@@ -1,8 +1,14 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext.jsx";
 
 function Header() {
   const { isAuthenticated, user, logout } = useAuth();
+  const navigate = useNavigate();
+
+  function handleLogout() {
+    logout();
+    navigate("/");
+  }
 
   return (
     <header className="site-header">
@@ -38,7 +44,7 @@ function Header() {
             <button
               type="button"
               className="nav-link"
-              onClick={logout}
+              onClick={handleLogout}
               style={{ background: "none", border: "none", cursor: "pointer" }}
             >
               Logout
