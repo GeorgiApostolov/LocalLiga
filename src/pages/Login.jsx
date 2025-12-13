@@ -13,7 +13,7 @@ function Login() {
     setValues((prev) => ({ ...prev, [name]: value }));
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
     if (!values.email.trim() || !values.password.trim()) {
@@ -21,11 +21,13 @@ function Login() {
       return;
     }
 
-    login({
-      email: values.email,
-      accessToken: "dummy-token",
-    });
-    navigate("/catalog");
+    try {
+      setError("");
+      await login(values.email, values.password);
+      navigate("/catalog");
+    } catch (err) {
+      setError(err.message);
+    }
   }
 
   return (

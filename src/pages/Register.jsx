@@ -10,14 +10,14 @@ function Register() {
   });
   const [error, setError] = useState("");
   const navigate = useNavigate();
-  const { login } = useAuth(); // засега логваме веднага след "регистрация"
+  const { register } = useAuth(); // засега логваме веднага след "регистрация"
 
   function handleChange(e) {
     const { name, value } = e.target;
     setValues((prev) => ({ ...prev, [name]: value }));
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault();
 
     if (
@@ -34,13 +34,13 @@ function Register() {
       return;
     }
 
-    // по-късно ще викаме SoftUni server /users/register
-    login({
-      email: values.email,
-      accessToken: "dummy-token",
-    });
-
-    navigate("/catalog");
+    try {
+      setError("");
+      await register(values.email, values.password);
+      navigate("/catalog");
+    } catch (err) {
+      setError(err.message);
+    }
   }
 
   return (
