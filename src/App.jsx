@@ -36,47 +36,43 @@ function App() {
     })();
   }, []);
 
-  if (loading) {
-    return (
-      <>
-        <Header />
-        <main>
-          <h2>Loading...</h2>
-        </main>
-        <Footer />
-      </>
-    );
-  }
-
   return (
     <BrowserRouter>
       <Header />
 
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/catalog" element={<Catalog matches={matches} />} />
+      {loading ? (
+        <main>
+          <h2>Loading...</h2>
+        </main>
+      ) : (
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/catalog" element={<Catalog matches={matches} />} />
 
-        <Route
-          path="/matches/:matchId"
-          element={<MatchDetails matches={matches} onDeleted={reloadMatches} />}
-        />
-
-        <Route element={<PrivateRoute />}>
           <Route
-            path="/create"
-            element={<CreateMatch onCreated={reloadMatches} />}
+            path="/matches/:matchId"
+            element={
+              <MatchDetails matches={matches} onDeleted={reloadMatches} />
+            }
           />
-          <Route
-            path="/matches/:matchId/edit"
-            element={<EditMatch matches={matches} onEdited={reloadMatches} />}
-          />
-        </Route>
 
-        <Route element={<GuestRoute />}>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-        </Route>
-      </Routes>
+          <Route element={<PrivateRoute />}>
+            <Route
+              path="/create"
+              element={<CreateMatch onCreated={reloadMatches} />}
+            />
+            <Route
+              path="/matches/:matchId/edit"
+              element={<EditMatch matches={matches} onEdited={reloadMatches} />}
+            />
+          </Route>
+
+          <Route element={<GuestRoute />}>
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+          </Route>
+        </Routes>
+      )}
 
       <Footer />
     </BrowserRouter>
