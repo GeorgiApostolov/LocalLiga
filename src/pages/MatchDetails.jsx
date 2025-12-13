@@ -1,10 +1,14 @@
 import { Link, useParams, useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext.jsx";
 
 function MatchDetails({ matches, onDeleteMatch }) {
   const { matchId } = useParams();
   const navigate = useNavigate();
 
   const match = matches.find((m) => m._id === matchId);
+  const { user, isAuthenticated } = useAuth();
+
+  const isOwner = isAuthenticated && match._ownerId === user._id;
 
   if (!match) {
     return (
@@ -40,13 +44,17 @@ function MatchDetails({ matches, onDeleteMatch }) {
         <strong>ID:</strong> {match.id}
       </p>
 
-      <Link to={`/matches/${matchId}/edit`}>Edit match</Link>
+      {isOwner && (
+        <div style={{ marginTop: "1rem", display: "flex", gap: "0.75rem" }}>
+          <Link to={`/matches/${matchId}/edit`} className="btn-link">
+            Edit
+          </Link>
 
-      <div style={{ marginTop: "1rem" }}>
-        <button className="danger" onClick={handleDelete}>
-          Delete match
-        </button>
-      </div>
+          <button className="danger" onClick={handleDelete}>
+            Delete
+          </button>
+        </div>
+      )}
     </main>
   );
 }
