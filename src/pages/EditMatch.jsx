@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext.jsx";
 
 function EditMatch({ matches, onEditMatch }) {
   const navigate = useNavigate();
@@ -24,6 +25,17 @@ function EditMatch({ matches, onEditMatch }) {
   });
 
   const [errors, setErrors] = useState({});
+
+  const { user, isAuthenticated } = useAuth();
+  const isOwner = isAuthenticated && existingMatch._ownerId === user._id;
+
+  if (!isOwner) {
+    return (
+      <main>
+        <h2>Not authorized.</h2>
+      </main>
+    );
+  }
 
   function handleChange(e) {
     const { name, value } = e.target;
