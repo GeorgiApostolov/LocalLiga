@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import * as matchesApi from "./api/matches";
 
 // COMP
 import Header from "./components/Header.jsx";
@@ -21,21 +22,26 @@ import PrivateRoute from "./guards/PrivateRoute.jsx";
 import GuestRoute from "./guards/GuestRoute.jsx";
 
 function App() {
-  const [matches, setMatches] = useState([
-    {
-      id: 1,
-      title: "Sunday League",
-      date: "2025-11-09",
-      location: "Studentski",
-    },
-    {
-      id: 2,
-      title: "After-work 5v5",
-      date: "2025-11-12",
-      location: "Nadezhda",
-    },
-    { id: 3, title: "Weekend Cup", date: "2025-11-15", location: "Druzhba" },
-  ]);
+
+
+function App() {
+  const [matches, setMatches] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  async function reloadMatches() {
+    const data = await matchesApi.getAllMatches();
+    setMatches(data);
+  }
+
+  useEffect(() => {
+    (async () => {
+      try {
+        await reloadMatches();
+      } finally {
+        setLoading(false);
+      }
+    })();
+  }, []);
 
   function handleCreateMatch(matchData) {
     const newMatch = {
