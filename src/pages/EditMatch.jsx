@@ -5,7 +5,7 @@ function EditMatch({ matches, onEditMatch }) {
   const navigate = useNavigate();
   const { matchId } = useParams();
 
-  const existingMatch = matches.find((m) => m.id === Number(matchId));
+  const existingMatch = matches.find((m) => m._id === matchId);
 
   const [values, setValues] = useState(() => {
     if (!existingMatch) {

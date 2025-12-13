@@ -4,7 +4,7 @@ function MatchDetails({ matches, onDeleteMatch }) {
   const { matchId } = useParams();
   const navigate = useNavigate();
 
-  const match = matches.find((m) => m.id === Number(matchId));
+  const match = matches.find((m) => m._id === matchId);
 
   if (!match) {
     return (
